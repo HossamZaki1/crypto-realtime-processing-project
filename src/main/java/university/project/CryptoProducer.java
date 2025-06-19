@@ -1,4 +1,4 @@
-package org.example;
+package university.project;
 
 import utils.CryptoApiClient;
 import org.apache.kafka.clients.producer.KafkaProducer;
