@@ -50,6 +50,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      - ../initdb:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "myuser", "-d", "cryptodb"]
       interval: 10s
@@ -109,7 +110,11 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - grafana-storage:/var/lib/grafana
+      # 1) Provisioning directory → Grafana provisioning
+      - ./provisioning:/etc/grafana/provisioning
+
+      # 2) JSON dashboards → where the provider expects them
+      - ../dashboards:/var/lib/grafana/dashboards
     environment:
       GF_SECURITY_ADMIN_PASSWORD: ${GF_SECURITY_ADMIN_PASSWORD:-admin}
     restart: unless-stopped
