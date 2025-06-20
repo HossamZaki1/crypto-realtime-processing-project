@@ -1,0 +1,8 @@
+FROM grafana/grafana:latest
+
+# (Optional) Default admin creds—override via env in compose or CI
+ENV GF_SECURITY_ADMIN_USER=admin
+ENV GF_SECURITY_ADMIN_PASSWORD=admin
+
+# Expose HTTP port
+EXPOSE 3000

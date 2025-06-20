@@ -36,7 +36,7 @@ public class CryptoApiClient {
     // Base URL format for CMC's quotes/latest endpoint:
     //   https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=<from>&convert=<to>
     private static final String BASE_URL_FORMAT =
-            "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest" +
+            "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest" +
                     "?symbol=%s" +
                     "&convert=%s";
 
@@ -104,7 +104,7 @@ public class CryptoApiClient {
             throw new RuntimeException("Unexpected JSON format: 'data." + fromCurrency + "' not found");
         }
         JsonNode coinNode = dataNode.get(fromCurrency);
-        JsonNode quoteNode = coinNode.get("quote");
+        JsonNode quoteNode = coinNode.get(0).get("quote");
         if (quoteNode == null || !quoteNode.has(toCurrency)) {
             throw new RuntimeException("Unexpected JSON format: 'quote." + toCurrency + "' not found");
         }

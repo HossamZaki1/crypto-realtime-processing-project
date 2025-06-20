@@ -1,4 +1,4 @@
-package org.example;
+package university.project;
 
 import utils.CryptoApiClient;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -7,8 +7,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.time.Duration;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -20,21 +19,11 @@ import java.util.Properties;
 public class CryptoProducer {
     private static final String KAFKA_BOOTSTRAP = "localhost:29092";
     private static final String TOPIC = "crypto-prices";
-    // Display symbol → API symbol mapping (XRB → NANO, others map to themselves)
-    private static final Map<String, String> SYMBOL_API_MAP = createSymbolMap();
 
-    private static Map<String, String> createSymbolMap() {
-        Map<String, String> map = new LinkedHashMap<>();
-        map.put("BTC", "BTC");
-        map.put("ETH", "ETH");
-        map.put("XRB", "NANO");   // XRB renamed to NANO on API
-        map.put("BNB", "BNB");
-        map.put("SOL", "SOL");
-        map.put("DOGE", "DOGE");
-        map.put("TRX", "TRX");
-        map.put("ADA", "ADA");
-        return map;
-    }
+    // Symbols to fetch (all map directly to themselves)
+    private static final List<String> SYMBOLS = List.of(
+            "BTC", "ETH", "XRP", "BNB", "SOL", "DOGE", "TRX", "ADA"
+    );
 
     private final KafkaProducer<String, String> producer;
     private final CryptoApiClient apiClient = new CryptoApiClient();
@@ -55,12 +44,10 @@ public class CryptoProducer {
     public void startProducing() throws Exception {
         System.out.println("CryptoProducer: starting (publishing every 60s to '" + TOPIC + "') ...");
         while (keepProducing) {
-            for (Map.Entry<String, String> entry : SYMBOL_API_MAP.entrySet()) {
-                String displaySymbol = entry.getKey();
-                String apiSymbol = entry.getValue();
-                String key = displaySymbol + "_EUR";
+            for (String symbol : SYMBOLS) {
+                String key = symbol + "_EUR";
                 try {
-                    String json = apiClient.fetchLatestExchangeRateJson(apiSymbol, "EUR");
+                    String json = apiClient.fetchLatestExchangeRateJson(symbol, "EUR");
                     ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, key, json);
                     producer.send(record, (metadata, ex) -> {
                         if (ex != null) {
@@ -73,7 +60,7 @@ public class CryptoProducer {
                         }
                     });
                 } catch (Exception e) {
-                    System.err.println("Error fetching/sending for " + displaySymbol + ": " + e.getMessage());
+                    System.err.println("Error fetching/sending for " + symbol + ": " + e.getMessage());
                     e.printStackTrace();
                 }
             }

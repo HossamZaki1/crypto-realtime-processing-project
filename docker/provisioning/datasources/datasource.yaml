@@ -1,0 +1,14 @@
+apiVersion: 1
+datasources:
+  - name: grafana-postgresql-datasource
+    uid: depfs3vrf5tkwd
+    type: postgres
+    access: proxy
+    url: postgres:5432
+    database: cryptodb
+    user: myuser
+    secureJsonData:
+      password: secretpass
+    jsonData:
+      sslmode: disable
+    isDefault: true
