@@ -31,7 +31,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class CryptoApiClient {
     // ── Replace "YOUR_CMC_API_KEY" with your actual CMC API key ──
-    private static final String CMC_API_KEY = "7a13940f-76e8-4373-8065-61661f454a63";
+    private static final String CMC_API_KEY = "TODO";
 
     // Base URL format for CMC's quotes/latest endpoint:
     //   https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=<from>&convert=<to>

@@ -504,7 +504,7 @@
           }
         }
       ],
-      "title": "Barchart min,max,avg (5min)",
+      "title": "Line chart of min,max,avg (5min)",
       "type": "timeseries"
     },
     {
@@ -617,7 +617,7 @@
           }
         }
       ],
-      "title": "Barchart min,max,avg (10min)",
+      "title": "Line chart min,max,avg (10min)",
       "type": "timeseries"
     }
   ],
